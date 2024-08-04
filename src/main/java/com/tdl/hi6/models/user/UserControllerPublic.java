@@ -53,15 +53,12 @@ public class UserControllerPublic {
         }
     }
 
-    @PutMapping (value = "/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable (value = "id") UUID id, @RequestHeader ("Authorization") String token, @RequestBody User user) {
+    @PutMapping (value = "/update")
+    public ResponseEntity<?> updateUser(@RequestHeader ("Authorization") String token, @RequestBody User user) {
         try {
             String username = jwtService.getUsernameFromToken(token);
             User currentUser = userService.getUserByUsername(username);
-            if(!currentUser.getId().equals(id)) {
-                return ResponseEntity.badRequest().body("User not authorized to update this user.");
-            }
-            User updatedUser = userService.updateUser(id, user);
+            User updatedUser = userService.updateUser(currentUser.getId(), user);
             UserDTO userDTO = UserDTO.builder()
                     .id(updatedUser.getId())
                     .names(updatedUser.getNames())
@@ -77,14 +74,13 @@ public class UserControllerPublic {
         }
     }
 
-    @PutMapping (value = "/{id}/change-password")
-    public ResponseEntity<?> changePassword(@PathVariable (value = "id") UUID id,
-                                            @RequestHeader ("Authorization") String token,
+    @PutMapping (value = "/change-password")
+    public ResponseEntity<?> changePassword(@RequestHeader ("Authorization") String token,
                                             @RequestBody PasswordChangeRequest request) {
         try{
             String username = jwtService.getUsernameFromToken(token);
             User currentUser = userService.getUserByUsername(username);
-            if(!currentUser.getId().equals(id)) {
+            if(!currentUser.getId().equals(currentUser.getId())) {
                 return ResponseEntity.badRequest().body("User not authorized to change password.");
             }
             if(userService.checkPassword(currentUser, request.getOldPassword())) {
@@ -97,9 +93,15 @@ public class UserControllerPublic {
         }
     }
 
-    @DeleteMapping (value = "/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable (value = "id") UUID id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping (value = "/delete")
+    public ResponseEntity<Void> deleteUser(@RequestHeader ("Authorization") String token) {
+        try {
+            String username = jwtService.getUsernameFromToken(token);
+            User currentUser = userService.getUserByUsername(username);
+            userService.deleteUser(currentUser.getId());
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
