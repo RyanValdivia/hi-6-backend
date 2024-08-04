@@ -32,5 +32,4 @@ public class UserControllerAdmin {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
-
 }

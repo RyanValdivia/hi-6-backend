@@ -1,6 +1,8 @@
 package com.tdl.hi6.models.user;
 
+import com.tdl.hi6.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserControllerPublic {
     private final UserService userService;
+    private final JwtService jwtService;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
@@ -32,32 +35,66 @@ public class UserControllerPublic {
 
     @GetMapping (value = "/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable (value = "id") UUID id) {
-        User user = userService.getUser(id);
-        UserDTO userDTO = UserDTO.builder()
-                .id(user.getId())
-                .names(user.getNames())
-                .surnames(user.getSurnames())
-                .description(user.getDescription())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .imageURL(user.getImageURL())
-                .build();
-        return ResponseEntity.ok().body(userDTO);
+        try {
+            User user = userService.getUser(id);
+            UserDTO userDTO = UserDTO.builder()
+                    .id(user.getId())
+                    .username(user.getUsername())
+                    .names(user.getNames())
+                    .surnames(user.getSurnames())
+                    .description(user.getDescription())
+                    .email(user.getEmail())
+                    .role(user.getRole())
+                    .imageURL(user.getImageURL())
+                    .build();
+            return ResponseEntity.ok().body(userDTO);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping (value = "/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable (value = "id") UUID id, @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
-        UserDTO userDTO = UserDTO.builder()
-                .id(updatedUser.getId())
-                .names(updatedUser.getNames())
-                .surnames(updatedUser.getSurnames())
-                .description(updatedUser.getDescription())
-                .email(updatedUser.getEmail())
-                .role(updatedUser.getRole())
-                .imageURL(updatedUser.getImageURL())
-                .build();
-        return ResponseEntity.ok().body(userDTO);
+    public ResponseEntity<?> updateUser(@PathVariable (value = "id") UUID id, @RequestHeader ("Authorization") String token, @RequestBody User user) {
+        try {
+            String username = jwtService.getUsernameFromToken(token);
+            User currentUser = userService.getUserByUsername(username);
+            if(!currentUser.getId().equals(id)) {
+                return ResponseEntity.badRequest().body("User not authorized to update this user.");
+            }
+            User updatedUser = userService.updateUser(id, user);
+            UserDTO userDTO = UserDTO.builder()
+                    .id(updatedUser.getId())
+                    .names(updatedUser.getNames())
+                    .surnames(updatedUser.getSurnames())
+                    .description(updatedUser.getDescription())
+                    .email(updatedUser.getEmail())
+                    .role(updatedUser.getRole())
+                    .imageURL(updatedUser.getImageURL())
+                    .build();
+            return ResponseEntity.ok().body(userDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping (value = "/{id}/change-password")
+    public ResponseEntity<?> changePassword(@PathVariable (value = "id") UUID id,
+                                            @RequestHeader ("Authorization") String token,
+                                            @RequestBody PasswordChangeRequest request) {
+        try{
+            String username = jwtService.getUsernameFromToken(token);
+            User currentUser = userService.getUserByUsername(username);
+            if(!currentUser.getId().equals(id)) {
+                return ResponseEntity.badRequest().body("User not authorized to change password.");
+            }
+            if(userService.checkPassword(currentUser, request.getOldPassword())) {
+                return ResponseEntity.badRequest().body("Old password does not match.");
+            }
+            userService.changePassword(currentUser, request.getNewPassword());
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping (value = "/{id}")
