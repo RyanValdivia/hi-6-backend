@@ -9,9 +9,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/public/api/user")
 @RequiredArgsConstructor
-public class UserController {
+public class UserControllerPublic {
     private final UserService userService;
 
     @GetMapping
