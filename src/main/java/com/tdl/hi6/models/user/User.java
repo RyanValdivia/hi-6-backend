@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private String description;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String imageURL;
 
     @Override
     public boolean isEnabled () {
