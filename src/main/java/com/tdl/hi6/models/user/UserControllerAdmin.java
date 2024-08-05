@@ -8,17 +8,18 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping ("/admin/api/user")
 @RequiredArgsConstructor
 public class UserControllerAdmin {
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAll());
     }
 
     @GetMapping (value = "/{id}")
-    public ResponseEntity<User> getUserById(@RequestParam UUID id) {
+    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 

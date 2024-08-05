@@ -16,19 +16,11 @@ public class AuthController {
 
     @PostMapping (value = "login")
     public ResponseEntity<?> login (@RequestBody LoginRequest request) {
-        try {
             return ResponseEntity.ok(authService.login(request));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping (value = "register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try {
-            return ResponseEntity.ok(authService.register(request));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(authService.register(request));
     }
 }
