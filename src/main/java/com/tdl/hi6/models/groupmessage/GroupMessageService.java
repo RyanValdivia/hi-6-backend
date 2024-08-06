@@ -23,6 +23,9 @@ public class GroupMessageService {
                 .orElseThrow(() -> new RuntimeException("Chat room not found"));
         User sender = userRepository.findById(senderId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        if (!chatRoom.getUsers().contains(sender)) {
+            throw new RuntimeException("User is not in chat room");
+        }
         GroupMessage groupMessage = GroupMessage.builder()
                 .chatRoom(chatRoom)
                 .sender(sender)
