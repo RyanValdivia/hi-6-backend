@@ -1,5 +1,6 @@
 package com.tdl.hi6.models.user;
 
+import com.tdl.hi6.models.user.enums.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -14,10 +15,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserControllerWS {
     private final UserService userService;
 
-    @MessageMapping ("/user.addUser")
+    @MessageMapping ("/user.connect")
     @SendTo ("/user/public")
-    public User addUser (@AuthenticationPrincipal User user) {
-
+    public UserDTO connectUser (@AuthenticationPrincipal User user) {
+        userService.connectUser(user.getId());
+        UserDTO userDTO = UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .names(user.getNames())
+                .surnames(user.getSurnames())
+                .description(user.getDescription())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .imageURL(user.getImageURL())
+                .build();
+        return userDTO;
     }
+
+    @MessageMapping ("/user.disconnect")
+    @SendTo ("/user/public")
+    public UserDTO disconnectUser (@AuthenticationPrincipal User user) {
+        userService.disconnectUser(user.getId());
+        UserDTO userDTO = UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .names(user.getNames())
+                .surnames(user.getSurnames())
+                .description(user.getDescription())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .imageURL(user.getImageURL())
+                .build();
+        return userDTO;
+    }
+
+
 
 }

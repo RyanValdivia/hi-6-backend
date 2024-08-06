@@ -37,7 +37,6 @@ public class AuthService {
                 .email(request.getEmail())
                 .description(request.getDescription())
                 .role(Role.USER)
-                .status(Status.ONLINE)
                 .build();
 
         userRepository.save(user);
