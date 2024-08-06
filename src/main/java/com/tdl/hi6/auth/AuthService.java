@@ -1,7 +1,8 @@
 package com.tdl.hi6.auth;
 
 import com.tdl.hi6.jwt.JwtService;
-import com.tdl.hi6.models.user.Role;
+import com.tdl.hi6.models.user.enums.Role;
+import com.tdl.hi6.models.user.enums.Status;
 import com.tdl.hi6.models.user.User;
 import com.tdl.hi6.models.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .description(request.getDescription())
                 .role(Role.USER)
+                .status(Status.ONLINE)
                 .build();
 
         userRepository.save(user);

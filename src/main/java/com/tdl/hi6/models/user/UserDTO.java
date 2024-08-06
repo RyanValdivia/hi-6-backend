@@ -1,5 +1,6 @@
 package com.tdl.hi6.models.user;
 
+import com.tdl.hi6.models.user.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

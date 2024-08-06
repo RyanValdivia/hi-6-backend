@@ -1,5 +1,7 @@
 package com.tdl.hi6.models.user;
 
+import com.tdl.hi6.models.user.enums.Role;
+import com.tdl.hi6.models.user.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,6 +37,8 @@ public class User implements UserDetails {
     private String description;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     private String imageURL;
 
     @Override
