@@ -1,6 +1,6 @@
 package com.tdl.hi6.config;
 
-import com.tdl.hi6.models.user.UserRepository;
+import com.tdl.hi6.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

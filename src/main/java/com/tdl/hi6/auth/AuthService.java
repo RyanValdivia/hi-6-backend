@@ -3,7 +3,7 @@ package com.tdl.hi6.auth;
 import com.tdl.hi6.jwt.JwtService;
 import com.tdl.hi6.models.user.Role;
 import com.tdl.hi6.models.user.User;
-import com.tdl.hi6.models.user.UserRepository;
+import com.tdl.hi6.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

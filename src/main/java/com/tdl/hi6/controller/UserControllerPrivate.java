@@ -1,5 +1,9 @@
-package com.tdl.hi6.models.user;
+package com.tdl.hi6.controller;
 
+import com.tdl.hi6.dto.UserDTO;
+import com.tdl.hi6.models.user.ChangePasswordRequest;
+import com.tdl.hi6.models.user.User;
+import com.tdl.hi6.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,6 +44,13 @@ public class UserControllerPrivate {
                 .description(res.getDescription())
                 .build();
         return ResponseEntity.ok(userDto);
+    }
+
+    @PutMapping ("/change-password")
+    public ResponseEntity<Void> changePassword
+            (@AuthenticationPrincipal User user, @RequestBody ChangePasswordRequest request) {
+        userService.changePassword(user.getId(), request.getOldPassword(), request.getNewPassword());
+        return ResponseEntity.ok().build();
     }
 
 }

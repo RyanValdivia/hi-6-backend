@@ -1,5 +1,6 @@
-package com.tdl.hi6.models.user;
+package com.tdl.hi6.repository;
 
+import com.tdl.hi6.models.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

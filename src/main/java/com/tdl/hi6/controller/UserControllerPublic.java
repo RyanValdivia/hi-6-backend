@@ -1,5 +1,8 @@
-package com.tdl.hi6.models.user;
+package com.tdl.hi6.controller;
 
+import com.tdl.hi6.dto.UserDTO;
+import com.tdl.hi6.models.user.User;
+import com.tdl.hi6.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

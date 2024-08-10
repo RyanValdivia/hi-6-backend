@@ -1,5 +1,6 @@
 package com.tdl.hi6.models.user;
 
+import com.tdl.hi6.models.chatroom.ChatRoom;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -41,7 +43,10 @@ public class User implements UserDetails {
     @Column (name = "image_url")
     private String imageURL;
 
-    private boolean online; // ONLINE, OFFLINE
+    private boolean online;
+
+    @ManyToMany (mappedBy = "users")
+    private Set<ChatRoom> chatRooms;
 
     @Override
     public boolean isEnabled () {

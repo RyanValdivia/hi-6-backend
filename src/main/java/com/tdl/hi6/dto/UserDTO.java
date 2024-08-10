@@ -1,4 +1,4 @@
-package com.tdl.hi6.models.user;
+package com.tdl.hi6.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

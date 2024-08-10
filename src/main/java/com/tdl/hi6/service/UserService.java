@@ -1,5 +1,8 @@
-package com.tdl.hi6.models.user;
+package com.tdl.hi6.service;
 
+import com.tdl.hi6.dto.UserDTO;
+import com.tdl.hi6.models.user.User;
+import com.tdl.hi6.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +40,15 @@ public class UserService {
         current.setDescription(user.getDescription());
         current.setImageURL(user.getImageURL());
         return userRepository.save(current);
+    }
+
+    public void changePassword(UUID id, String oldPassword, String newPassword) {
+        User current = getById(id);
+        if (!current.getPassword().equals(oldPassword)) {
+            throw new RuntimeException("Wrong password");
+        }
+        current.setPassword(newPassword);
+        userRepository.save(current);
     }
 
 }
