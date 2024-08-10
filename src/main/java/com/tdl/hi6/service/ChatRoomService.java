@@ -7,6 +7,7 @@ import com.tdl.hi6.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,13 +25,16 @@ public class ChatRoomService {
         return chatRoomRepository.save(chatRoom);
     }
 
+    public ChatRoom getChatRoom (String title) {
+        return chatRoomRepository.findByTitle(title)
+                .orElseThrow(() -> new RuntimeException("No chat room found for title: " + title));
+    }
+
     public void addUser (String title, UUID userId) {
         User user = userService.getById(userId);
         ChatRoom chatRoom = chatRoomRepository.findByTitle(title)
                 .orElseThrow(() -> new RuntimeException("No chat room found for title: " + title));
-        chatRoom.getUsers().add(user);
-        user.getChatRooms().add(chatRoom);
-        chatRoomRepository.save(chatRoom);
+        user.addChatRoom(chatRoom);
         userRepository.save(user);
     }
 
@@ -42,6 +46,11 @@ public class ChatRoomService {
         user.getChatRooms().remove(chatRoom);
         chatRoomRepository.save(chatRoom);
         userRepository.save(user);
+    }
+
+    public List<ChatRoom> getChatRooms(UUID userId) {
+        User user = userService.getById(userId);
+        return new ArrayList<>(user.getChatRooms());
     }
 
     public List<ChatRoom> getAllChatRooms() {

@@ -1,25 +1,22 @@
 package com.tdl.hi6.models.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tdl.hi6.models.chatroom.ChatRoom;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode
 @Table (name = "users")
 public class User implements UserDetails {
     @Id
@@ -45,8 +42,16 @@ public class User implements UserDetails {
 
     private boolean online;
 
-    @ManyToMany (mappedBy = "users")
-    private Set<ChatRoom> chatRooms;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable (name = "users_chat_rooms",
+            joinColumns = {@JoinColumn (name = "user_id")},
+            inverseJoinColumns = {@JoinColumn (name = "chat_room_id")})
+    @JsonIgnore
+    private Set<ChatRoom> chatRooms = new HashSet<>();
 
     @Override
     public boolean isEnabled () {
@@ -76,5 +81,15 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities () {
         return List.of(new SimpleGrantedAuthority(this.role.toString()));
+    }
+
+    public void addChatRoom (ChatRoom chatRoom) {
+        this.chatRooms.add(chatRoom);
+        chatRoom.getUsers().add(this);
+    }
+
+    public void removeChatRoom (ChatRoom chatRoom) {
+        this.chatRooms.remove(chatRoom);
+        chatRoom.getUsers().remove(this);
     }
 }

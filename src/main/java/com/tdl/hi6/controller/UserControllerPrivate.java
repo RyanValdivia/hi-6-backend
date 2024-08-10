@@ -1,5 +1,6 @@
 package com.tdl.hi6.controller;
 
+import com.tdl.hi6.dto.ChatRoomDTO;
 import com.tdl.hi6.dto.UserDTO;
 import com.tdl.hi6.models.user.ChangePasswordRequest;
 import com.tdl.hi6.models.user.User;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping ("/private/user")
 @RequiredArgsConstructor
@@ -17,12 +20,19 @@ public class UserControllerPrivate {
 
     @GetMapping
     public ResponseEntity<UserDTO> getUser (@AuthenticationPrincipal User user) {
+        User current = userService.getById(user.getId());
         UserDTO userDTO = UserDTO.builder()
-                .names(user.getNames())
-                .surnames(user.getSurnames())
-                .email(user.getEmail())
-                .imageURL(user.getImageURL())
-                .description(user.getDescription())
+                .names(current.getNames())
+                .surnames(current.getSurnames())
+                .email(current.getEmail())
+                .imageURL(current.getImageURL())
+                .description(current.getDescription())
+                .chatRooms(new ArrayList<>(current.getChatRooms().stream().map(
+                        (chatRoom ->
+                            ChatRoomDTO.builder()
+                                    .title(chatRoom.getTitle())
+                                    .build()
+                        )).toList()))
                 .build();
         return ResponseEntity.ok(userDTO);
     }

@@ -1,11 +1,10 @@
 package com.tdl.hi6.models.chatroom;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tdl.hi6.models.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.*;
 
@@ -14,6 +13,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class ChatRoom {
     @Id
     @GeneratedValue (strategy = GenerationType.UUID)
@@ -22,12 +22,13 @@ public class ChatRoom {
     @Column (unique = true, nullable = false)
     private String title;
 
-    @ManyToMany
-    @JoinTable(
-            name = "chatroom_users",
-            joinColumns = @JoinColumn(name = "chatroom_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    @ManyToMany (fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "chatRooms")
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
 //    @OneToMany

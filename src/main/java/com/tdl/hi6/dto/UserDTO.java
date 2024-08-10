@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,4 +17,5 @@ public class UserDTO {
     private String surnames;
     private String description;
     private String imageURL;
+    private List<ChatRoomDTO> chatRooms;
 }
