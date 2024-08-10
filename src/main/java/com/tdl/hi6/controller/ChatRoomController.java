@@ -4,6 +4,7 @@ import com.tdl.hi6.dto.ChatRoomDTO;
 import com.tdl.hi6.models.user.User;
 import com.tdl.hi6.service.ChatRoomService;
 import com.tdl.hi6.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

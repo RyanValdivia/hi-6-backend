@@ -75,4 +75,8 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities () {
         return List.of(new SimpleGrantedAuthority(this.role.toString()));
     }
+
+    public void addChatRoom (ChatRoom chatRoom) {
+        this.chatRooms.add(chatRoom);
+    }
 }
