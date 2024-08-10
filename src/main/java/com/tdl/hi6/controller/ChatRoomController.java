@@ -29,14 +29,12 @@ public class ChatRoomController {
     @PostMapping ("/add-user")
     public ResponseEntity<?> addUser
             (@AuthenticationPrincipal User user, @RequestBody ChatRoomDTO chatRoomDTO) {
-        chatRoomService.addUser(chatRoomDTO.getTitle(), user.getId());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping ("/delete-user")
     public ResponseEntity<?> deleteUser
             (@AuthenticationPrincipal User user, @RequestBody ChatRoomDTO chatRoomDTO) {
-        chatRoomService.removeUser(chatRoomDTO.getTitle(), user.getId());
         return ResponseEntity.ok().build();
     }
 
@@ -45,25 +43,4 @@ public class ChatRoomController {
         return ResponseEntity.ok(chatRoomService.getAllChatRooms());
     }
 
-    @PostMapping ("/test1")
-    public ResponseEntity<?> test (@AuthenticationPrincipal User user,
-                                   @RequestBody ChatRoomDTO chatRoomDTO) {
-        ChatRoom chatRoom = chatRoomService.getChatRoom(chatRoomDTO.getTitle());
-        return ResponseEntity.ok(new ArrayList<>(chatRoom.getUsers()));
-    }
-
-    @GetMapping ("/test2")
-    public ResponseEntity<?> test2 (@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(chatRoomService.getChatRooms(user.getId()));
-    }
-
-    @GetMapping ("/test3")
-    public ResponseEntity<?> getAllTest() {
-        List<ChatRoom> chatRooms = chatRoomService.getAllChatRooms();
-        chatRooms.forEach(chatRoom -> {
-            System.out.println("ChatRoom: " + chatRoom.getTitle());
-            chatRoom.getUsers().forEach(user -> System.out.println("User: " + user.getEmail()));
-        });
-        return ResponseEntity.ok(chatRooms);
-    }
 }
