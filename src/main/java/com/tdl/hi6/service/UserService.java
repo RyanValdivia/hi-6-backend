@@ -3,12 +3,14 @@ package com.tdl.hi6.service;
 import com.tdl.hi6.dto.UserDTO;
 import com.tdl.hi6.models.user.User;
 import com.tdl.hi6.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Transactional (rollbackOn = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class UserService {
