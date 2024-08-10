@@ -42,17 +42,6 @@ public class User implements UserDetails {
 
     private boolean online;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable (name = "users_chat_rooms",
-            joinColumns = {@JoinColumn (name = "user_id")},
-            inverseJoinColumns = {@JoinColumn (name = "chat_room_id")})
-    @JsonIgnore
-    private Set<ChatRoom> chatRooms = new HashSet<>();
-
     @Override
     public boolean isEnabled () {
         return true;
@@ -81,15 +70,5 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities () {
         return List.of(new SimpleGrantedAuthority(this.role.toString()));
-    }
-
-    public void addChatRoom (ChatRoom chatRoom) {
-        this.chatRooms.add(chatRoom);
-        chatRoom.getUsers().add(this);
-    }
-
-    public void removeChatRoom (ChatRoom chatRoom) {
-        this.chatRooms.remove(chatRoom);
-        chatRoom.getUsers().remove(this);
     }
 }
