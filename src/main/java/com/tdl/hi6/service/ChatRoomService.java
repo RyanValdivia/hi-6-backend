@@ -17,7 +17,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
-    private final UserService userService;
     private final UserRepository userRepository;
 
     public ChatRoom create (String title) {
@@ -30,8 +29,8 @@ public class ChatRoomService {
 
     @Transactional
     public void addUser (UUID userId, String name) {
-        ChatRoom chatRoom = getChatRoom(name);
-        User user = userService.getById(userId);
+        ChatRoom chatRoom = chatRoomRepository.findByTitle(name).get();
+        User user = userRepository.findById(userId).get();
         boolean res = user.getChatRooms().add(chatRoom);
         if (!res) {
             throw new RuntimeException("User is already in that chat room");
@@ -40,13 +39,13 @@ public class ChatRoomService {
     }
 
     public void removeUser (UUID userId, String name) {
-        ChatRoom chatRoom = getChatRoom(name);
-        User user = userService.getById(userId);
-        boolean res = user.getChatRooms().remove(chatRoom);
-        if (!res) {
-            throw new RuntimeException("User is not in that chat room");
-        }
-        userRepository.save(user);
+//        ChatRoom chatRoom = getChatRoom(name);
+//        User user = userService.getById(userId);
+//        boolean res = user.getChatRooms().remove(chatRoom);
+//        if (!res) {
+//            throw new RuntimeException("User is not in that chat room");
+//        }
+//        userRepository.save(user);
     }
 
     public ChatRoom getChatRoom (String title) {
