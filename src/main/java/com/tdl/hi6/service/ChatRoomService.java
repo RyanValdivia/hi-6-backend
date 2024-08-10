@@ -30,28 +30,7 @@ public class ChatRoomService {
                 .orElseThrow(() -> new RuntimeException("No chat room found for title: " + title));
     }
 
-    public void addUser (String title, UUID userId) {
-        User user = userService.getById(userId);
-        ChatRoom chatRoom = chatRoomRepository.findByTitle(title)
-                .orElseThrow(() -> new RuntimeException("No chat room found for title: " + title));
-        user.addChatRoom(chatRoom);
-        userRepository.save(user);
-    }
 
-    public void removeUser (String title, UUID userId) {
-        User user = userService.getById(userId);
-        ChatRoom chatRoom = chatRoomRepository.findByTitle(title)
-                .orElseThrow(() -> new RuntimeException("No chat room found for title: " + title));
-        chatRoom.getUsers().remove(user);
-        user.getChatRooms().remove(chatRoom);
-        chatRoomRepository.save(chatRoom);
-        userRepository.save(user);
-    }
-
-    public List<ChatRoom> getChatRooms(UUID userId) {
-        User user = userService.getById(userId);
-        return new ArrayList<>(user.getChatRooms());
-    }
 
     public List<ChatRoom> getAllChatRooms() {
         return chatRoomRepository.findAll();

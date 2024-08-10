@@ -27,12 +27,7 @@ public class UserControllerPrivate {
                 .email(current.getEmail())
                 .imageURL(current.getImageURL())
                 .description(current.getDescription())
-                .chatRooms(new ArrayList<>(current.getChatRooms().stream().map(
-                        (chatRoom ->
-                            ChatRoomDTO.builder()
-                                    .title(chatRoom.getTitle())
-                                    .build()
-                        )).toList()))
+                
                 .build();
         return ResponseEntity.ok(userDTO);
     }
