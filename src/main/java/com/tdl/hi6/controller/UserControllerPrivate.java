@@ -27,7 +27,6 @@ public class UserControllerPrivate {
                 .email(current.getEmail())
                 .imageURL(current.getImageURL())
                 .description(current.getDescription())
-
                 .build();
         return ResponseEntity.ok(userDTO);
     }

@@ -1,6 +1,5 @@
 package com.tdl.hi6.models.chatroom;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tdl.hi6.models.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,4 +19,7 @@ public class ChatRoom {
 
     @Column (unique = true, nullable = false)
     private String title;
+
+    @ManyToMany (mappedBy = "chatRooms")
+    private Set<User> users = new HashSet<>();
 }

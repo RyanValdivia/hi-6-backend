@@ -4,6 +4,7 @@ import com.tdl.hi6.jwt.JwtService;
 import com.tdl.hi6.models.user.Role;
 import com.tdl.hi6.models.user.User;
 import com.tdl.hi6.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
+@Transactional (rollbackOn = Exception.class)
 @RequiredArgsConstructor
 @Service
 public class AuthService {

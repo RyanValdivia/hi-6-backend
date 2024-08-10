@@ -8,8 +8,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional (rollbackOn = Exception.class)
@@ -22,8 +23,30 @@ public class ChatRoomService {
     public ChatRoom create (String title) {
         ChatRoom chatRoom = ChatRoom.builder()
                 .title(title)
+                .users(new HashSet<>())
                 .build();
         return chatRoomRepository.save(chatRoom);
+    }
+
+    @Transactional
+    public void addUser (UUID userId, String name) {
+        ChatRoom chatRoom = getChatRoom(name);
+        User user = userService.getById(userId);
+        boolean res = user.getChatRooms().add(chatRoom);
+        if (!res) {
+            throw new RuntimeException("User is already in that chat room");
+        }
+        userRepository.save(user);
+    }
+
+    public void removeUser (UUID userId, String name) {
+        ChatRoom chatRoom = getChatRoom(name);
+        User user = userService.getById(userId);
+        boolean res = user.getChatRooms().remove(chatRoom);
+        if (!res) {
+            throw new RuntimeException("User is not in that chat room");
+        }
+        userRepository.save(user);
     }
 
     public ChatRoom getChatRoom (String title) {

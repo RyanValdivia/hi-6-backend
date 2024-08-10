@@ -1,7 +1,5 @@
 package com.tdl.hi6.models.user;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tdl.hi6.models.chatroom.ChatRoom;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,6 +39,12 @@ public class User implements UserDetails {
     private String imageURL;
 
     private boolean online;
+
+    @ManyToMany (fetch = FetchType.LAZY)
+    @JoinTable (name = "users_chat_rooms_map",
+    joinColumns = @JoinColumn (name = "user_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn (name = "chat_room_id", referencedColumnName = "id"))
+    private Set<ChatRoom> chatRooms = new HashSet<>();
 
     @Override
     public boolean isEnabled () {

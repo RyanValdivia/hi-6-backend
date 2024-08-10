@@ -1,9 +1,7 @@
 package com.tdl.hi6.controller;
 
 import com.tdl.hi6.dto.ChatRoomDTO;
-import com.tdl.hi6.models.chatroom.ChatRoom;
 import com.tdl.hi6.models.user.User;
-import com.tdl.hi6.repository.UserRepository;
 import com.tdl.hi6.service.ChatRoomService;
 import com.tdl.hi6.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,18 +26,26 @@ public class ChatRoomController {
     @PostMapping ("/add-user")
     public ResponseEntity<?> addUser
             (@AuthenticationPrincipal User user, @RequestBody ChatRoomDTO chatRoomDTO) {
+        chatRoomService.addUser(user.getId(), chatRoomDTO.getTitle());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping ("/delete-user")
-    public ResponseEntity<?> deleteUser
+    @PostMapping ("/remove-user")
+    public ResponseEntity<?> removeUser
             (@AuthenticationPrincipal User user, @RequestBody ChatRoomDTO chatRoomDTO) {
+        chatRoomService.removeUser(user.getId(), chatRoomDTO.getTitle());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
     public ResponseEntity<?> getAll () {
         return ResponseEntity.ok(chatRoomService.getAllChatRooms());
+    }
+
+    @GetMapping ("/all-from-user")
+    public ResponseEntity<?> getAllFromUser (@AuthenticationPrincipal User user) {
+        User current = userService.getById(user.getId());
+        return ResponseEntity.ok(current.getChatRooms());
     }
 
 }
