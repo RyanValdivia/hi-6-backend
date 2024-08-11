@@ -22,7 +22,6 @@ public class ChatRoomService {
     public ChatRoom create (String title) {
         ChatRoom chatRoom = ChatRoom.builder()
                 .title(title)
-                .users(new HashSet<>())
                 .build();
         return chatRoomRepository.save(chatRoom);
     }

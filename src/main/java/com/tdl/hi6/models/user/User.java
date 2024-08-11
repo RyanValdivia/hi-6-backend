@@ -42,9 +42,9 @@ public class User implements UserDetails {
 
     @ManyToMany (fetch = FetchType.LAZY)
     @JoinTable (name = "users_chat_rooms_map",
-    joinColumns = @JoinColumn (name = "user_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn (name = "chat_room_id", referencedColumnName = "id"))
-    private Set<ChatRoom> chatRooms = new HashSet<>();
+    joinColumns = @JoinColumn (name = "user_email", referencedColumnName = "email"),
+    inverseJoinColumns = @JoinColumn (name = "chat_room_title", referencedColumnName = "title"))
+    private Set<ChatRoom> chatRooms;
 
     @Override
     public boolean isEnabled () {

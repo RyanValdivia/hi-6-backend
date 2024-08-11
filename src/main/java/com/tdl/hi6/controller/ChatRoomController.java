@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping ("/public/chatroom")
@@ -43,10 +45,15 @@ public class ChatRoomController {
         return ResponseEntity.ok(chatRoomService.getAllChatRooms());
     }
 
+    @Transactional
     @GetMapping ("/all-from-user")
     public ResponseEntity<?> getAllFromUser (@AuthenticationPrincipal User user) {
         User current = userService.getById(user.getId());
-        return ResponseEntity.ok(current.getChatRooms());
+        List<ChatRoomDTO> rooms = current.getChatRooms().stream().map((chatRoom ->
+                ChatRoomDTO.builder()
+                        .title(chatRoom.getTitle())
+                        .build())).toList();
+        return ResponseEntity.ok(rooms);
     }
 
 }
