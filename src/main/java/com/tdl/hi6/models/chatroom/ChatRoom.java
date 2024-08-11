@@ -27,11 +27,11 @@ public class ChatRoom {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChatRoom chatRoom = (ChatRoom) o;
-        return Objects.equals(id, chatRoom.id);
+        return Objects.equals(id, chatRoom.id) && title.equals(chatRoom.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, title);
     }
 }

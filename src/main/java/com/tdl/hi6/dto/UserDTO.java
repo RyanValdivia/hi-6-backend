@@ -17,5 +17,4 @@ public class UserDTO {
     private String surnames;
     private String description;
     private String imageURL;
-    private List<ChatRoomDTO> chatRooms;
 }

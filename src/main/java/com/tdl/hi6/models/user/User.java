@@ -14,7 +14,6 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@EqualsAndHashCode
 @Table (name = "users")
 public class User implements UserDetails {
     @Id
@@ -76,7 +75,16 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority(this.role.toString()));
     }
 
-    public void addChatRoom (ChatRoom chatRoom) {
-        this.chatRooms.add(chatRoom);
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id) && email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode () {
+        return Objects.hash(id, email);
     }
 }

@@ -1,6 +1,8 @@
 package com.tdl.hi6.controller;
 
 import com.tdl.hi6.dto.ChatRoomDTO;
+import com.tdl.hi6.dto.UserDTO;
+import com.tdl.hi6.models.chatroom.ChatRoom;
 import com.tdl.hi6.models.user.User;
 import com.tdl.hi6.service.ChatRoomService;
 import com.tdl.hi6.service.UserService;
@@ -42,7 +44,10 @@ public class ChatRoomController {
 
     @GetMapping
     public ResponseEntity<?> getAll () {
-        return ResponseEntity.ok(chatRoomService.getAllChatRooms());
+        return ResponseEntity.ok(chatRoomService.getAllChatRooms().stream()
+                .map(chatRoom -> ChatRoomDTO.builder()
+                        .title(chatRoom.getTitle())
+                        .build()).toList());
     }
 
     @Transactional
@@ -54,6 +59,19 @@ public class ChatRoomController {
                         .title(chatRoom.getTitle())
                         .build())).toList();
         return ResponseEntity.ok(rooms);
+    }
+
+    @PostMapping ("all-from-chatroom")
+    public ResponseEntity<?> allFromChatRoom (@RequestBody ChatRoomDTO chatRoomDTO) {
+        ChatRoom current = chatRoomService.getChatRoom(chatRoomDTO.getTitle());
+        return ResponseEntity.ok(current.getUsers().stream()
+                .map(user -> UserDTO.builder()
+                        .email(user.getEmail())
+                        .names(user.getNames())
+                        .surnames(user.getSurnames())
+                        .description(user.getDescription())
+                        .imageURL(user.getImageURL())
+                        .build()).toList());
     }
 
 }
