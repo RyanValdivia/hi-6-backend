@@ -62,8 +62,12 @@ public class ChatRoomController {
     }
 
     @PostMapping ("all-from-chatroom")
-    public ResponseEntity<?> allFromChatRoom (@RequestBody ChatRoomDTO chatRoomDTO) {
+    public ResponseEntity<?> allFromChatRoom
+            (@AuthenticationPrincipal User userDetails, @RequestBody ChatRoomDTO chatRoomDTO) {
         ChatRoom current = chatRoomService.getChatRoom(chatRoomDTO.getTitle());
+        if (!current.getUsers().contains(userDetails)) {
+            return ResponseEntity.badRequest().body("The user is not in that ChatRoom");
+        }
         return ResponseEntity.ok(current.getUsers().stream()
                 .map(user -> UserDTO.builder()
                         .email(user.getEmail())
