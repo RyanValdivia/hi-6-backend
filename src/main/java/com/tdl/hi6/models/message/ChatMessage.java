@@ -17,7 +17,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class ChatMessage {
     @Id
     @GeneratedValue (strategy = GenerationType.UUID)
     private UUID id;

@@ -6,14 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageDTO {
+public class ChatMessageDTO {
     private String content;
     private String senderEmail;
     private String receiverEmail;
     private Date timestamp;
+    private ConnectionDTO connection;
+    private MessageType type;
+    private MessageDeliveryStatus deliveryStatus;
+    private List<MessageDeliveryUpdate> messageDeliveryUpdateList;
 }

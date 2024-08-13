@@ -1,20 +1,19 @@
 package com.tdl.hi6.service;
 
-import com.tdl.hi6.dto.MessageDTO;
-import com.tdl.hi6.models.message.Message;
+import com.tdl.hi6.dto.ChatMessageDTO;
 import com.tdl.hi6.models.user.User;
-import com.tdl.hi6.repository.MessageRepository;
+import com.tdl.hi6.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MessageService {
+public class ChatMessageService {
     private final SimpMessagingTemplate messagingTemplate;
-    private final MessageRepository messageRepository;
+    private final ChatMessageRepository messageRepository;
 
-    public void sendMessage (MessageDTO messageDTO, User sender) {
+    public void sendMessage (ChatMessageDTO messageDTO, User sender) {
 
     }
 }
