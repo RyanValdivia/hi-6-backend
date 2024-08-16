@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping ("/private/user")
@@ -72,5 +73,12 @@ public class UserControllerPrivate {
                         .description(userDetails.getDescription())
                         .build()).toList();
         return ResponseEntity.ok(friends);
+    }
+
+    @PostMapping ("/remove-friend/{id}")
+    public ResponseEntity<Void> removeFriend
+            (@AuthenticationPrincipal User user, @PathVariable UUID id) {
+        userService.removeFriend(user.getId(), id);
+        return ResponseEntity.ok().build();
     }
 }
