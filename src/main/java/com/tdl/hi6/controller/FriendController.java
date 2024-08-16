@@ -70,8 +70,8 @@ public class FriendController {
     @GetMapping ("/received")
     public ResponseEntity<?> getReceivedFriendRequests (
             @AuthenticationPrincipal User user) {
-        User receiver = userService.getById(user.getId());
-        List<ReceivedFriendRequest> friendRequests = receiver.getReceivedFriendRequests()
+        List<ReceivedFriendRequest> friendRequests = friendRequestService
+                .getReceivedFriendRequests(user.getId())
                 .stream().map(request -> {
                     UserDTO sender = UserDTO.builder()
                             .email(request.getSender().getEmail())
