@@ -12,5 +12,5 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class FriendRequestDTO {
-    private UUID receiverId;
+    private String receiverEmail;
 }

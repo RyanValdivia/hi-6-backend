@@ -25,7 +25,8 @@ public class FriendController {
     @PostMapping ("/send")
     public ResponseEntity<?> sendFriendRequest
             (@AuthenticationPrincipal User sender, @RequestBody FriendRequestDTO friendRequest) {
-        friendRequestService.sendFriendRequest(sender.getId(), friendRequest.getReceiverId());
+        User receiver = userService.getByEmail(friendRequest.getReceiverEmail());
+        friendRequestService.sendFriendRequest(sender.getId(), receiver.getId());
         return ResponseEntity.ok().build();
     }
 
@@ -33,7 +34,8 @@ public class FriendController {
     public ResponseEntity<?> acceptFriendRequest
             (@AuthenticationPrincipal User sender,
              @RequestBody FriendRequestDTO friendRequest) {
-        friendRequestService.acceptFriendRequest(sender.getId(), friendRequest.getReceiverId());
+        User receiver = userService.getByEmail(friendRequest.getReceiverEmail());
+        friendRequestService.acceptFriendRequest(sender.getId(), receiver.getId());
         return ResponseEntity.ok().build();
     }
 
@@ -41,16 +43,17 @@ public class FriendController {
     public ResponseEntity<?> declineFriendRequest
             (@AuthenticationPrincipal User sender,
              @RequestBody FriendRequestDTO friendRequest) {
-        friendRequestService.declineFriendRequest(sender.getId(), friendRequest.getReceiverId());
+        User receiver = userService.getByEmail(friendRequest.getReceiverEmail());
+        friendRequestService.declineFriendRequest(sender.getId(), receiver.getId());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping ("/sent")
     public ResponseEntity<List<?>> getSentFriendRequests
             (@AuthenticationPrincipal User user) {
-        User sender = userService.getById(user.getId());
-        List<SentFriendRequest> friendRequests = sender.getSentFriendRequests().stream()
-                .map(request -> {
+        List<SentFriendRequest> friendRequests = friendRequestService
+                .getSentFriendRequests(user.getId())
+                .stream().map(request -> {
                     User receiver = request.getReceiver();
                     UserDTO receiverDTO = UserDTO.builder()
                             .email(receiver.getEmail())
