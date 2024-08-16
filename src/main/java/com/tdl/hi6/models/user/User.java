@@ -43,14 +43,14 @@ public class User implements UserDetails {
 
     @ManyToMany (fetch = FetchType.LAZY)
     @JoinTable (name = "users_chat_rooms_map",
-    joinColumns = @JoinColumn (name = "user_email", referencedColumnName = "email"),
-    inverseJoinColumns = @JoinColumn (name = "chat_room_title", referencedColumnName = "title"))
+    joinColumns = @JoinColumn (name = "user_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn (name = "chat_room_id", referencedColumnName = "id"))
     private Set<ChatRoom> chatRooms;
 
     @ManyToMany (fetch = FetchType.LAZY)
     @JoinTable(name = "friends_map",
-            joinColumns = @JoinColumn(name = "user_email", referencedColumnName = "email"),
-            inverseJoinColumns = @JoinColumn(name = "friend_email", referencedColumnName = "email"))
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"))
     private Set<User> friends;
 
     @OneToMany (fetch = FetchType.LAZY, mappedBy = "sender",

@@ -44,5 +44,6 @@ public class UserControllerPublic {
                 .description(user.getDescription())
                 .imageURL(user.getImageURL())
                 .build();
+        return ResponseEntity.ok(res);
     }
 }

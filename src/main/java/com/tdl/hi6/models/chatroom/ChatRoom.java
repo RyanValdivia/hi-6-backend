@@ -23,7 +23,7 @@ public class ChatRoom {
     private Set<User> users;
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals (Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChatRoom chatRoom = (ChatRoom) o;
@@ -31,7 +31,7 @@ public class ChatRoom {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode () {
         return Objects.hash(id, title);
     }
 }
