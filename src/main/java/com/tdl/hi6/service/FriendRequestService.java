@@ -39,8 +39,7 @@ public class FriendRequestService {
         }
         friendRequest.setStatus(Status.ACCEPTED);
         friendRequestRepository.save(friendRequest);
-        sender.addFriend(receiver);
-        userService.save(sender);
+        userService.addFriend(senderId, receiverId);
     }
 
     public void declineFriendRequest(UUID senderId, UUID receiverId) {

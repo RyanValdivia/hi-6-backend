@@ -6,10 +6,12 @@ import com.tdl.hi6.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,7 +29,20 @@ public class UserControllerPublic {
                 .email(user.getEmail())
                 .description(user.getDescription())
                 .imageURL(user.getImageURL())
-                .build()).collect(Collectors.toList());
+                .build()).toList();
         return ResponseEntity.ok(userDTOS);
+    }
+
+    @GetMapping ("/public/user/{id}")
+    public ResponseEntity<UserDTO> getById (@PathVariable UUID id) {
+        User user = userService.getById(id);
+        UserDTO res = UserDTO.builder()
+                .id(user.getId())
+                .names(user.getNames())
+                .surnames(user.getSurnames())
+                .email(user.getEmail())
+                .description(user.getDescription())
+                .imageURL(user.getImageURL())
+                .build();
     }
 }

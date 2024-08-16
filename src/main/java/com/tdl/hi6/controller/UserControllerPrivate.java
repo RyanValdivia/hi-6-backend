@@ -23,6 +23,7 @@ public class UserControllerPrivate {
     public ResponseEntity<UserDTO> getUser (@AuthenticationPrincipal User user) {
         User current = userService.getById(user.getId());
         UserDTO userDTO = UserDTO.builder()
+                .id(current.getId())
                 .names(current.getNames())
                 .surnames(current.getSurnames())
                 .email(current.getEmail())
@@ -42,6 +43,7 @@ public class UserControllerPrivate {
     public ResponseEntity<UserDTO> updateUser (@AuthenticationPrincipal User user, @RequestBody UserDTO userDetails) {
         User res = userService.updateUser(user.getId(), userDetails);
         UserDTO userDto = UserDTO.builder()
+                .id(res.getId())
                 .names(res.getNames())
                 .surnames(res.getSurnames())
                 .email(res.getEmail())
@@ -62,6 +64,7 @@ public class UserControllerPrivate {
     public ResponseEntity<List<?>> getFriends (@AuthenticationPrincipal User user) {
         List<UserDTO> friends = userService.getFriends(user.getId()).stream()
                 .map(userDetails -> UserDTO.builder()
+                        .id(userDetails.getId())
                         .names(userDetails.getNames())
                         .surnames(userDetails.getSurnames())
                         .email(userDetails.getEmail())
@@ -70,5 +73,4 @@ public class UserControllerPrivate {
                         .build()).toList();
         return ResponseEntity.ok(friends);
     }
-
 }
