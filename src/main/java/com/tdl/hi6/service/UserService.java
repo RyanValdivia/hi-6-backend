@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Transactional (rollbackOn = Exception.class)
@@ -18,6 +19,10 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
+
+    public void save (User user) {
+        userRepository.save(user);
+    }
 
     public List<User> getAll() {
         return userRepository.findAll();
@@ -86,6 +91,20 @@ public class UserService {
         }
         current.addFriend(friend);
         userRepository.save(current);
+    }
 
+    public void removeFriend (UUID userId, UUID friendId) {
+        User current = getById(userId);
+        User friend = getById(friendId);
+        if (!current.getFriends().contains(friend)) {
+            throw new RuntimeException("Friend " + friendId + " does not exist");
+        }
+        current.removeFriend(friend);
+        userRepository.save(current);
+    }
+
+    public Set<User> getFriends (UUID userId) {
+        User current = getById(userId);
+        return current.getFriends();
     }
 }

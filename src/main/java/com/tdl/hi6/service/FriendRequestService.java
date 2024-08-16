@@ -7,6 +7,7 @@ import com.tdl.hi6.repository.FriendRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -18,11 +19,13 @@ public class FriendRequestService {
     public void sendFriendRequest(UUID senderId, UUID receiverId) {
         User sender = userService.getById(senderId);
         User receiver = userService.getById(receiverId);
-        FriendRequest friendRequest = FriendRequest.builder()
-                .sender(sender)
-                .receiver(receiver)
-                .status(Status.PENDING)
-                .build();
+        FriendRequest friendRequest = friendRequestRepository
+                .findBySenderAndReceiver(sender, receiver)
+                .orElseGet(() -> FriendRequest.builder()
+                        .sender(sender)
+                        .receiver(receiver)
+                        .build());
+        friendRequest.setStatus(Status.PENDING);
         friendRequestRepository.save(friendRequest);
     }
 
@@ -36,6 +39,8 @@ public class FriendRequestService {
         }
         friendRequest.setStatus(Status.ACCEPTED);
         friendRequestRepository.save(friendRequest);
+        sender.addFriend(receiver);
+        userService.save(sender);
     }
 
     public void declineFriendRequest(UUID senderId, UUID receiverId) {
@@ -48,6 +53,16 @@ public class FriendRequestService {
         }
         friendRequest.setStatus(Status.DECLINED);
         friendRequestRepository.save(friendRequest);
+    }
+
+    public Set<FriendRequest> getSentFriendRequests (UUID userId) {
+        User user = userService.getById(userId);
+        return user.getSentFriendRequests();
+    }
+
+    public Set<FriendRequest> getReceivedFriendRequests (UUID userId) {
+        User user = userService.getById(userId);
+        return user.getReceivedFriendRequests();
     }
 
 }

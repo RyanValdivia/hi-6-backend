@@ -1,5 +1,6 @@
 package com.tdl.hi6.models.user;
 
+import com.tdl.hi6.dto.UserDTO;
 import com.tdl.hi6.models.chatroom.ChatRoom;
 import com.tdl.hi6.models.friendrequest.FriendRequest;
 import jakarta.persistence.*;
