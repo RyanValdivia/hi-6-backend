@@ -27,6 +27,7 @@ public class SecurityConfig {
                                         ("/auth/**", "/ws", "/stomp", "/api-docs/**","/swagger-ui/**")
                                 .permitAll()
                                 .anyRequest()
+
                                 .authenticated())
                 .sessionManagement
                         (sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -23,6 +23,7 @@ public class UserControllerPublic {
     public ResponseEntity<List<UserDTO>> getAll() {
         List<User> users = userService.getAll();
         List<UserDTO> userDTOS = users.stream().map(user -> UserDTO.builder()
+                .id(user.getId())
                 .names(user.getNames())
                 .surnames(user.getSurnames())
                 .email(user.getEmail())

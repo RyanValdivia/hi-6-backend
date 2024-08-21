@@ -6,6 +6,7 @@ import com.tdl.hi6.models.user.User;
 import com.tdl.hi6.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,11 +14,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 
 @Transactional (rollbackOn = Exception.class)
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class AuthService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -35,6 +36,7 @@ public class AuthService {
     }
 
     public AuthResponse register (RegisterRequest request) {
+        log.info("Registering user with email {}", request);
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
