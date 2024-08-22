@@ -30,6 +30,7 @@ public class AuthService {
         UserDetails user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + request.getEmail() + " not found"));
         String token = jwtService.getToken(user);
+        log.info("Log In user with email {}", request.getEmail());
         return AuthResponse.builder()
                 .token(token)
                 .build();
