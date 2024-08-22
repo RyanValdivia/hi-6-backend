@@ -22,10 +22,17 @@ public class FriendController {
     private final FriendRequestService friendRequestService;
     private final UserService userService;
 
+    @PostMapping ("/remove")
+    public ResponseEntity<?> removeFriend(@AuthenticationPrincipal User user, @RequestBody FriendRequestDTO friendRequest) {
+        User receiver = userService.getById(friendRequest.getReceiverId());
+        friendRequestService.removeFriend(user.getId(), receiver.getId());
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping ("/send")
     public ResponseEntity<?> sendFriendRequest
             (@AuthenticationPrincipal User sender, @RequestBody FriendRequestDTO friendRequest) {
-        User receiver = userService.getByEmail(friendRequest.getReceiverEmail());
+        User receiver = userService.getById(friendRequest.getReceiverId());
         friendRequestService.sendFriendRequest(sender.getId(), receiver.getId());
         return ResponseEntity.ok().build();
     }
@@ -34,7 +41,7 @@ public class FriendController {
     public ResponseEntity<?> acceptFriendRequest
             (@AuthenticationPrincipal User sender,
              @RequestBody FriendRequestDTO friendRequest) {
-        User receiver = userService.getByEmail(friendRequest.getReceiverEmail());
+        User receiver = userService.getById(friendRequest.getReceiverId());
         friendRequestService.acceptFriendRequest(sender.getId(), receiver.getId());
         return ResponseEntity.ok().build();
     }
@@ -43,7 +50,7 @@ public class FriendController {
     public ResponseEntity<?> declineFriendRequest
             (@AuthenticationPrincipal User sender,
              @RequestBody FriendRequestDTO friendRequest) {
-        User receiver = userService.getByEmail(friendRequest.getReceiverEmail());
+        User receiver = userService.getById(friendRequest.getReceiverId());
         friendRequestService.declineFriendRequest(sender.getId(), receiver.getId());
         return ResponseEntity.ok().build();
     }

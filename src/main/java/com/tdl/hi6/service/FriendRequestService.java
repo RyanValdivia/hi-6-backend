@@ -63,6 +63,16 @@ public class FriendRequestService {
         friendRequestRepository.save(friendRequest);
     }
 
+    public void removeFriend (UUID senderId, UUID receiverId) {
+        User sender = userService.getById(senderId);
+        User receiver = userService.getById(receiverId);
+        userService.removeFriend(senderId, receiverId);
+        FriendRequest friendRequest = friendRequestRepository
+                .findBySenderAndReceiver(sender, receiver)
+                .orElseThrow(() -> new RuntimeException("Friend request not found"));
+        friendRequestRepository.delete(friendRequest);
+    }
+
     public Set<FriendRequest> getSentFriendRequests (UUID userId) {
         User user = userService.getById(userId);
         return user.getSentFriendRequests();
