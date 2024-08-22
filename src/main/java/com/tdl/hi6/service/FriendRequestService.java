@@ -17,6 +17,9 @@ public class FriendRequestService {
     private final UserService userService;
 
     public void sendFriendRequest(UUID senderId, UUID receiverId) {
+        if (senderId.equals(receiverId)) {
+            throw new RuntimeException("Can not send a friend request to yourself");
+        }
         User sender = userService.getById(senderId);
         User receiver = userService.getById(receiverId);
         FriendRequest friendRequest = friendRequestRepository
@@ -30,6 +33,9 @@ public class FriendRequestService {
     }
 
     public void acceptFriendRequest(UUID senderId, UUID receiverId) {
+        if (senderId.equals(receiverId)) {
+            throw new RuntimeException("Can not send a friend request to yourself");
+        }
         User sender = userService.getById(senderId);
         User receiver = userService.getById(receiverId);
         FriendRequest friendRequest = friendRequestRepository.findBySenderAndReceiver(sender, receiver)
@@ -43,6 +49,9 @@ public class FriendRequestService {
     }
 
     public void declineFriendRequest(UUID senderId, UUID receiverId) {
+        if (senderId.equals(receiverId)) {
+            throw new RuntimeException("Can not send a friend request to yourself");
+        }
         User sender = userService.getById(senderId);
         User receiver = userService.getById(receiverId);
         FriendRequest friendRequest = friendRequestRepository.findBySenderAndReceiver(sender, receiver)
