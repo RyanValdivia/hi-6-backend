@@ -56,6 +56,7 @@ public class FriendController {
                 .stream().map(request -> {
                     User receiver = request.getReceiver();
                     UserDTO receiverDTO = UserDTO.builder()
+                            .id(receiver.getId())
                             .email(receiver.getEmail())
                             .names(receiver.getNames())
                             .surnames(receiver.getSurnames())
@@ -77,6 +78,7 @@ public class FriendController {
                 .getReceivedFriendRequests(user.getId())
                 .stream().map(request -> {
                     UserDTO sender = UserDTO.builder()
+                            .id(request.getId())
                             .email(request.getSender().getEmail())
                             .names(request.getSender().getNames())
                             .surnames(request.getSender().getSurnames())
